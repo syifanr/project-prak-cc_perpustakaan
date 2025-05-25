@@ -4,11 +4,10 @@ import cookieParser from "cookie-parser";
 import UserRoute from "./routes/UserRoute.js";
 import "dotenv/config";
 
-const express = require('express');
+
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 
 
 app.use(cors({
