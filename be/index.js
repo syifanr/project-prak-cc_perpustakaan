@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import UserRoute from "./routes/UserRoute.js";
 import "dotenv/config";
 
+const express = require('express');
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +27,6 @@ app.use(UserRoute);
 
 
 const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
