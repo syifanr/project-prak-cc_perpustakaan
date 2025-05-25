@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Data Buku</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #9d6652, #9d6652);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      color: #9d6652;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 30px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4a148c;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #2962ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Data Buku</h1>
+    <form id="editBukuForm">
+      <input type="hidden" id="id" />
+
+      <label for="kategori">Kategori</label>
+      <input type="text" id="kategori" required />
+
+      <label for="nama_buku">Nama Buku</label>
+      <input type="text" id="nama_buku" required />
+
+      <label for="harga">Harga</label>
+      <input type="number" id="harga" required />
+
+      <label for="stok">Stok</label>
+      <input type="number" id="stok" required />
+
+      <label for="penerbit">Penerbit</label>
+      <input type="text" id="penerbit" required />
+
+      <label for="tahun">Tahun</label>
+      <input type="text" id="tahun" required />
+
+      <button type="submit">Simpan Perubahan</button>
+    </form>
+    <a href="dashboardAdmin.html">← Kembali ke Dashboard</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const BASE_URL = "http://localhost:8080";
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Kamu belum login.");
+      window.location.href = "login.html";
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    async function fetchData() {
+      try {
+        const res = await axios.get(`${BASE_URL}/dataBuku/${id}`);
+        const data = res.data;
+
+        document.getElementById("id").value = data.id;
+        document.getElementById("kategori").value = data.kategori;
+        document.getElementById("nama_buku").value = data.nama_buku;
+        document.getElementById("harga").value = data.harga;
+        document.getElementById("stok").value = data.stok;
+        document.getElementById("penerbit").value = data.penerbit;
+        document.getElementById("tahun").value = data.tahun;
+      } catch (error) {
+        alert("Gagal memuat data.");
+        console.error(error);
+      }
+    }
+
+    document.getElementById("editBukuForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const updatedData = {
+        kategori: document.getElementById("kategori").value,
+        nama_buku: document.getElementById("nama_buku").value,
+        harga: document.getElementById("harga").value,
+        stok: document.getElementById("stok").value,
+        penerbit: document.getElementById("penerbit").value,
+        tahun: document.getElementById("tahun").value,
+      };
+
+      try {
+        await axios.put(`${BASE_URL}/edit-dataBuku/${id}`, updatedData);
+        alert("Data buku berhasil diperbarui.");
+        window.location.href = "dashboardAdmin.html";
+      } catch (error) {
+        alert("Gagal menyimpan perubahan.");
+        console.error(error);
+      }
+    });
+
+    fetchData();
+  </script>
+</body>
+</html>

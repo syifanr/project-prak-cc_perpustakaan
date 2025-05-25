@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tambah Buku</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #9d6652;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #9d6652;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: #1976d2;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #1976d2;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tambah Data Buku</h1>
+    <form id="tambahBukuForm">
+      <label for="id">ID Buku</label>
+      <input type="text" id="id" required />
+
+      <label for="kategori">Kategori</label>
+      <input type="text" id="kategori" required />
+
+      <label for="nama_buku">Nama Buku</label>
+      <input type="text" id="nama_buku" required />
+
+      <label for="harga">Harga</label>
+      <input type="number" id="harga" required />
+
+      <label for="stok">Stok</label>
+      <input type="number" id="stok" required />
+
+      <label for="penerbit">Penerbit</label>
+      <input type="text" id="penerbit" required />
+
+      <label for="tahun">Tahun</label>
+      <input type="text" id="tahun" required />
+
+      <button type="submit">Tambah Buku</button>
+    </form>
+    <a href="dashboardAdmin.html">Kembali ke Dashboard</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const BASE_URL = "http://localhost:8080";
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    alert("Kamu belum login. Silakan login dulu.");
+    window.location.href = "login.html";
+  }
+
+  // Set header Authorization secara global seperti di editBuku
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  document.getElementById("tambahBukuForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const dataBaru = {
+      id: document.getElementById("id").value,
+      kategori: document.getElementById("kategori").value,
+      nama_buku: document.getElementById("nama_buku").value,
+      harga: parseInt(document.getElementById("harga").value),
+      stok: parseInt(document.getElementById("stok").value),
+      penerbit: document.getElementById("penerbit").value,
+      tahun: document.getElementById("tahun").value
+    };
+
+    try {
+      await axios.post(`${BASE_URL}/add-dataBuku`, dataBaru);
+      alert("Data buku berhasil ditambahkan.");
+      window.location.href = "dashboardAdmin.html";
+    } catch (error) {
+      console.error("Gagal menambahkan data buku:", error);
+      alert(error.response?.data?.message || "Terjadi kesalahan saat menambahkan buku.");
+    }
+  });
+</script>
+
+</body>
+</html>

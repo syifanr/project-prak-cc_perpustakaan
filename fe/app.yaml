@@ -1,0 +1,48 @@
+runtime: python39  # Menggunakan runtime standar untuk hosting HTML statis
+service: fe-perpus194dan207  # Nama layanan App Engine, bisa diubah sesuai kebutuhan
+instance_class: F1  # Kelas instance untuk App Engine (F1 adalah kelas standar yang ringan)
+
+handlers:
+  - url: /
+    static_files: dashboard.html
+    upload: dashboard.html
+
+  - url: /
+    static_files: dashboardAdmin.html
+    upload: dashboardAdmin.
+    
+  - url: /
+    static_files: login.html
+    upload: login.html
+
+  - url: /
+    static_files: register.html
+    upload: register.html
+
+  - url: /
+    static_files: tambahBuku.html
+    upload: tambahBuku.html
+
+  - url: /
+    static_files: tambahPenerbit.html
+    upload: tambahPenerbit.html
+
+  - url: /
+    static_files: editPenerbit.html
+    upload: editPenerbit.html
+
+  - url: /
+    static_files: editBuku.html
+    upload: editBuku.html
+
+  # Serve file js
+  - url: /js/(.*)
+    static_files: js/\1
+    upload:
+      js/(.*)
+
+  - url: /(.*)
+    static_files: \1
+    upload: (.*)
+
+default_expiration: "1h"  # Waktu cache default

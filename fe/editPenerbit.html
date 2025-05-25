@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Data Penerbit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #9d6652;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #9d6652;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #6a1b9a;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Data Penerbit</h1>
+    <form id="editPenerbitForm">
+      <input type="hidden" id="id" />
+
+      <label for="nama">Nama</label>
+      <input type="text" id="nama" required />
+
+      <label for="alamat">Alamat</label>
+      <input type="text" id="alamat" required />
+
+      <label for="kota">Kota</label>
+      <input type="text" id="kota" required />
+
+      <label for="telepon">Telepon</label>
+      <input type="text" id="telepon" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <button type="submit">Simpan Perubahan</button>
+    </form>
+    <a href="dashboardAdmin.html">Kembali ke Dashboard</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const BASE_URL = "http://localhost:8080";
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Kamu belum login.");
+      window.location.href = "login.html";
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    async function fetchData() {
+      try {
+        const res = await axios.get(`${BASE_URL}/dataPenerbit/${id}`);
+        const data = res.data;
+
+        document.getElementById("id").value = data.id;
+        document.getElementById("nama").value = data.nama;
+        document.getElementById("alamat").value = data.alamat;
+        document.getElementById("kota").value = data.kota;
+        document.getElementById("telepon").value = data.telepon;
+        document.getElementById("email").value = data.email;
+      } catch (error) {
+        alert("Gagal memuat data.");
+        console.error(error);
+      }
+    }
+
+    document.getElementById("editPenerbitForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const updatedData = {
+        nama: document.getElementById("nama").value,
+        alamat: document.getElementById("alamat").value,
+        kota: document.getElementById("kota").value,
+        telepon: document.getElementById("telepon").value,
+        email: document.getElementById("email").value,
+      };
+
+      try {
+        await axios.put(`${BASE_URL}/edit-dataPenerbit/${id}`, updatedData);
+        alert("Data penerbit berhasil diperbarui.");
+        window.location.href = "dashboardAdmin.html";
+      } catch (error) {
+        alert("Gagal menyimpan perubahan.");
+        console.error(error);
+      }
+    });
+
+    fetchData();
+  </script>
+</body>
+</html>

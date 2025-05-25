@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard User - Perpustakaan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #9d6652;
+      padding: 20px;
+      background-image: url('https://storage.cloud.google.com/perpustakaan194207/perpus2.jpg?authuser=1');
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #ffffff;
+      margin: 0;
+    }
+    button.logout {
+      padding: 8px 15px;
+      background: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    h2 {
+      color: #120e0e;
+    }
+    .section {
+      background-color: rgba(255, 255, 255, 0.85);
+      background-repeat: no-repeat;
+      background-position: right top;
+      background-size: 1400px 100px;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+    }
+    input[type="text"], input[type="date"] {
+      padding: 8px;
+      width: 200px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 8px 15px;
+      background: #9d6652;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #9d6652;
+      color: white;
+    }
+    #pinjamModal {
+      display:none;
+      position: fixed;
+      top: 20%;
+      left: 30%;
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Dashboard Perpustakaan</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="section">
+    <h2>Data Buku</h2>
+    <table id="tabelBuku">
+      <thead>
+        <tr>
+          <th>ID</th><th>Kategori</th><th>Nama Buku</th><th>Harga</th><th>Stok</th><th>Penerbit</th><th>Tahun</th><th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Data Penerbit</h2>
+    <table id="tabelPenerbit">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nama</th><th>Alamat</th><th>Kota</th><th>Telepon</th><th>Email</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Riwayat Peminjaman</h2>
+    <table id="riwayatTable">
+      <thead>
+        <tr><th>Nama</th><th>NIM</th><th>Judul Buku</th><th>Tanggal Pinjam</th><th>Tanggal Kembali</th><th>Status</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="pinjamModal" style="
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 999;
+  width: 500px;
+  max-width: 90%;
+">
+  <h2 style="margin-top: 0; color: #333;">Form Peminjaman Buku</h2>
+  <p style="margin-bottom: 20px;">Buku: <strong id="bukuNama" style="color: #5a3d2b;"></strong></p>
+  <form onsubmit="submitPinjam(event)">
+  <input type="hidden" id="bukuId" />
+  
+  <label for="nama">Nama</label>
+  <input type="text" id="nama" placeholder="Nama Peminjam" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc;" />
+  
+  <label for="nim">NIM</label>
+  <input type="text" id="nim" placeholder="NIM" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc;" />
+  
+  <label for="tanggal_pinjam">Tanggal Pinjam</label>
+  <input type="date" id="tanggal_pinjam" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc;" />
+  
+  <label for="tanggal_kembali">Tanggal Kembali</label>
+  <input type="date" id="tanggal_kembali" required style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ccc;" />
+  
+  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+    <button type="submit" style="padding: 10px 20px; background: #9d6652; color: white; border: none; border-radius: 6px;">Pinjam</button>
+    <button type="button" onclick="document.getElementById('pinjamModal').style.display='none'" style="padding: 10px 20px; background: #ccc; border: none; border-radius: 6px;">Batal</button>
+  </div>
+</form>
+
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const BASE_URL = "http://localhost:8080";
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      alert("Kamu belum login.");
+      window.location.href = "login.html";
+    }
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    async function loadBuku() {
+      try {
+        const res = await axios.get(`${BASE_URL}/dataBuku`);
+        const tbody = document.querySelector("#tabelBuku tbody");
+        tbody.innerHTML = res.data.map(buku => `
+          <tr>
+            <td>${buku.id}</td>
+            <td>${buku.kategori}</td>
+            <td>${buku.nama_buku}</td>
+            <td>${buku.harga}</td>
+            <td>${buku.stok}</td>
+            <td>${buku.penerbit}</td>
+            <td>${buku.tahun}</td>
+            <td><button onclick=\"showPinjamForm('${buku.id}', '${buku.nama_buku}')\">Pinjam</button></td>
+          </tr>`).join("");
+      } catch (err) {
+        alert("Gagal memuat data buku: " + err.message);
+      }
+    }
+
+    async function loadPenerbit() {
+      try {
+        const res = await axios.get(`${BASE_URL}/dataPenerbit`);
+        const tbody = document.querySelector("#tabelPenerbit tbody");
+        tbody.innerHTML = res.data.map(p => `
+          <tr>
+            <td>${p.id}</td><td>${p.nama}</td><td>${p.alamat}</td><td>${p.kota}</td><td>${p.telepon}</td><td>${p.email}</td>
+          </tr>`).join("");
+      } catch (err) {
+        alert("Gagal memuat data penerbit: " + err.message);
+      }
+    }
+
+    function showPinjamForm(id, nama) {
+      document.getElementById("bukuId").value = id;
+      document.getElementById("bukuNama").innerText = nama;
+      document.getElementById("pinjamModal").style.display = "block";
+    }
+
+    async function submitPinjam(e) {
+      e.preventDefault();
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      const data = {
+        id_user: tokenPayload.id_user,
+        id_buku: document.getElementById("bukuId").value,
+        nama: document.getElementById("nama").value,
+        nim: document.getElementById("nim").value,
+        tanggal_pinjam: document.getElementById("tanggal_pinjam").value,
+        tanggal_kembali: document.getElementById("tanggal_kembali").value,
+      };
+
+      await axios.post(`${BASE_URL}/pinjam`, data);
+      alert("Berhasil meminjam buku!");
+      document.getElementById("pinjamModal").style.display = "none";
+      loadBuku();
+      loadRiwayat();
+    }
+
+    async function loadRiwayat() {
+      const id_user = JSON.parse(atob(token.split('.')[1])).id_user;
+      const res = await axios.get(`${BASE_URL}/riwayat/${id_user}`);
+      const tbody = document.querySelector("#riwayatTable tbody");
+      tbody.innerHTML = res.data.map(row => `
+        <tr>
+          <td>${row.nama}</td>
+          <td>${row.nim}</td>
+          <td>${row.id_buku}</td>
+          <td>${row.tanggal_pinjam}</td>
+          <td>${row.tanggal_kembali}</td>
+          <td>${row.status}</td>
+        </tr>`).join("");
+    }
+
+    loadBuku();
+    loadPenerbit();
+    loadRiwayat();
+  </script>
+</body>
+</html>
