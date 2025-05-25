@@ -13,8 +13,10 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:8080",
-    // "https://fe-notessyifa-dot-fit-crow-450802-e0.uc.r.appspot.com",
-    // "https://notes-syifa194-797713225706.us-central1.run.app",
+    "https://fe-perpus194dan207-dot-fit-crow-450802-e0.uc.r.appspot.com",
+    "https://perpus-syifa194naufal207-797713225706.us-central1.run.app",
+    "https://storage.cloud.google.com/perpustakaan194207/perpus2.jpg?authuser=1",
+    "https://storage.cloud.google.com/perpustakaan194207/perpus.jpg?authuser=1"
   ],
   credentials: true,
 }));
