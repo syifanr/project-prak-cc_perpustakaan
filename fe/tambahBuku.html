@@ -86,6 +86,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   const BASE_URL = "https://perpus-syifa194naufal207-797713225706.us-central1.run.app";
+  axios.defaults.withCredentials = true;
   const token = localStorage.getItem("accessToken");
 
   if (!token) {

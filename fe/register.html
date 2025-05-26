@@ -121,11 +121,12 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      try {
-        const res = await axios.post("https://perpus-syifa194naufal207-797713225706.us-central1.run.app/register"
-, {
+       try {
+        const res = await axios.post("https://perpus-syifa194naufal207-797713225706.us-central1.run.app/login", {
           username,
           password
+        }, {
+          withCredentials: true
         });
         alert(res.data.message);
         window.location.href = "login.html";
