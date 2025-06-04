@@ -225,23 +225,42 @@
     }
 
     async function submitPinjam(e) {
-      e.preventDefault();
-      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-      const data = {
-        id_user: tokenPayload.id_user,
-        id_buku: document.getElementById("bukuId").value,
-        nama: document.getElementById("nama").value,
-        nim: document.getElementById("nim").value,
-        tanggal_pinjam: document.getElementById("tanggal_pinjam").value,
-        tanggal_kembali: document.getElementById("tanggal_kembali").value,
-      };
+  e.preventDefault();
 
-      await axios.post(`${BASE_URL}/pinjam`, data);
-      alert("Berhasil meminjam buku!");
-      document.getElementById("pinjamModal").style.display = "none";
-      loadBuku();
-      loadRiwayat();
+  const bukuId = document.getElementById("bukuId").value;
+
+  try {
+    // Memuat data buku untuk mendapatkan informasi stok
+    const res = await axios.get(`${BASE_URL}/dataBuku/${bukuId}`);
+    const buku = res.data;
+
+    // Cek apakah stok buku lebih dari 0
+    if (buku.stok <= 0) {
+      alert("Stok buku ini habis. Tidak dapat melakukan peminjaman.");
+      return; // Hentikan proses jika stok 0
     }
+
+    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+    const data = {
+      id_user: tokenPayload.id_user,
+      id_buku: bukuId,
+      nama: document.getElementById("nama").value,
+      nim: document.getElementById("nim").value,
+      tanggal_pinjam: document.getElementById("tanggal_pinjam").value,
+      tanggal_kembali: document.getElementById("tanggal_kembali").value,
+    };
+
+    // Kirim permintaan peminjaman jika stok tersedia
+    await axios.post(`${BASE_URL}/pinjam`, data);
+    alert("Berhasil meminjam buku!");
+    document.getElementById("pinjamModal").style.display = "none";
+    loadBuku();
+    loadRiwayat();
+  } catch (err) {
+    alert("Gagal meminjam buku: " + err.message);
+  }
+}
+
 
     async function loadRiwayat() {
       const id_user = JSON.parse(atob(token.split('.')[1])).id_user;
