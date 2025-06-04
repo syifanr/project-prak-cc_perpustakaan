@@ -7,18 +7,14 @@ import "dotenv/config";
 
 const app = express();
 
-
-
-
+// CORS configuration
 app.use(cors({
   origin: [
-    "http://localhost:8080",
-    "https://fe-perpus194dan207-dot-fit-crow-450802-e0.uc.r.appspot.com",
-    "https://perpus-syifa194naufal207-797713225706.us-central1.run.app",
-    "https://storage.cloud.google.com/perpustakaan194207/perpus2.jpg?authuser=1",
-    "https://storage.cloud.google.com/perpustakaan194207/perpus.jpg?authuser=1"
+    "http://localhost:8080", // Localhost URL for local development
+    "https://fe-perpus194dan207-dot-fit-crow-450802-e0.uc.r.appspot.com", // URL of the frontend deployed
+    "https://perpus-syifa194naufal207-797713225706.us-central1.run.app", // URL of the backend deployed
   ],
-  credentials: true,
+  credentials: true, // Allow sending cookies/credentials with requests
 }));
 
 app.use(cookieParser());

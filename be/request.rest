@@ -48,16 +48,17 @@ Content-Type: application/json
 }
 
 ###
-PUT  http://localhost:4000/edit-dataPenerbit/A2
+PUT  https://perpus-syifa194naufal207-797713225706.us-central1.run.app/edit-dataPenerbit/P1
 Content-Type: application/json
 
 {
-    "id": "A2",
-    "nama": "Hanung",
-    "alamat": "Kadipaten",
-    "kota": "Yogyakarta",
-    "telepon": "08321",
-    "email": "h@gmail.com"
+    "id": "P1",
+        "nama": "Eko Polosoro",
+        "alamat": "Jln Nangka",
+        "kota": "Bandung",
+        "telepon": "08564321765",
+        "email": "Ekoploro@gmail.com",
+      
 }
 
 ###
@@ -68,13 +69,13 @@ DELETE http://localhost:4000/delete-dataPenerbit/A2
 GET http://localhost:4000/profile/syifanur
 
 ###
-POST http://localhost:4000/register
+POST https://perpus-syifa194naufal207-797713225706.us-central1.run.app/register
 Content-Type: application/json
 
 {
 
-    "username": "cobalho",
-    "password": "bismillah"
+    "username": "sabrina",
+    "password": "123"
 }
 
 ###
