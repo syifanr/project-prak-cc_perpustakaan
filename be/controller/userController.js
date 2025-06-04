@@ -106,7 +106,7 @@ async function login(req, res) {
       status: "Success",
       message: "Login Berhasil",
       accessToken,
-      refreshTokenToken,
+      refreshToken,
       safeUserData,
     });
   } catch (error) {
