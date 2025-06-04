@@ -80,6 +80,24 @@
       margin-top: 15px;
     }
 
+ 
+    .title-container {
+      text-align: center;
+      color: white;
+      margin-bottom: 150px;
+      position: absolute;
+      top: 130px;
+      width: 100%;
+    }
+
+    .title-container h2 {
+      font-size: 45px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); 
+      background-color: rgba(0, 0, 0, 0.5); 
+      padding: 10px;
+      border-radius: 5px;
+    }
+
     @media (max-width: 768px) {
       body {
         flex-direction: column-reverse;
@@ -96,24 +114,23 @@
   <div class="left"></div>
 
   <div class="right">
-  <div style="text-align: center; color: white; margin-bottom: 150px; position: absolute; top: 130px;">
-    <h2 style="font-size: 35px;">Perpustakaan Informatika</h2>
+    <div class="title-container">
+      <h2>Perpustakaan Informatika</h2>
+    </div>
+    <div class="form-container">
+      <h1>Registrasi Pengguna</h1>
+      <form id="registerForm">
+        <label for="username">Username</label>
+        <input id="username" type="text" required placeholder="Masukkan Username" />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" required placeholder="Masukkan Password" />
+
+        <button type="submit">Daftar</button>
+      </form>
+      <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+    </div>
   </div>
-  <div class="form-container">
-    <h1>Registrasi Pengguna</h1>
-    <form id="registerForm">
-      <label for="username">Username</label>
-      <input id="username" type="text" required placeholder="Masukkan Username" />
-
-      <label for="password">Password</label>
-      <input id="password" type="password" required placeholder="Masukkan Password" />
-
-      <button type="submit">Daftar</button>
-    </form>
-    <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
-  </div>
-</div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
@@ -123,7 +140,7 @@
       const password = document.getElementById("password").value;
 
        try {
-        const res = await axios.post("https://perpus-syifa194naufal207-797713225706.us-central1.run.app/register", {
+        const res = await axios.post("https://perpus-syifa194207-797713225706.us-central1.run.app/register", {
           username,
           password
         }, {
