@@ -15,6 +15,8 @@ app.use(cors({
     "https://perpus-syifa194naufal207-797713225706.us-central1.run.app", // URL of the backend deployed
   ],
   credentials: true, // Allow sending cookies/credentials with requests
+  methods: ['GET', 'POST', 'OPTIONS'], // Mengizinkan metode GET, POST, dan OPTIONS
+  allowedHeaders: ['Content-Type', 'Authorization'], // Mengizinkan header tertentu
 }));
 
 app.use(cookieParser());
