@@ -230,7 +230,6 @@
   const bukuId = document.getElementById("bukuId").value;
 
   try {
-    // Memuat data buku untuk mendapatkan informasi stok
     const res = await axios.get(`${BASE_URL}/dataBuku/${bukuId}`);
     const buku = res.data;
 
@@ -240,6 +239,7 @@
       return;
     }
 
+    // Ambil payload dari token JWT
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
     const data = {
       id_user: tokenPayload.id_user,
@@ -252,17 +252,21 @@
 
     console.log("Data peminjaman:", data); // Log data yang akan dikirim
 
-    await axios.post(`${BASE_URL}/pinjam`, data);
+    const response = await axios.post(`${BASE_URL}/pinjam`, data);
+
+    // Log respons dari server
+    console.log("Response dari server:", response.data);
 
     alert("Berhasil meminjam buku!");
-    document.getElementById("pinjamModal").style.display = "none"; // Menutup modal setelah sukses
+    document.getElementById("pinjamModal").style.display = "none";  // Menutup modal setelah sukses
     loadBuku();
     loadRiwayat();
   } catch (err) {
-    console.error("Gagal meminjam buku:", err); // Log error
+    console.error("Gagal meminjam buku:", err);  // Log error
     alert("Gagal meminjam buku: " + err.message);
   }
 }
+
 
 
 
