@@ -225,7 +225,7 @@
     }
 
     async function submitPinjam(e) {
-  e.preventDefault();
+  e.preventDefault(); // Mencegah form melakukan submit secara default
 
   const bukuId = document.getElementById("bukuId").value;
 
@@ -255,7 +255,7 @@
     await axios.post(`${BASE_URL}/pinjam`, data);
 
     alert("Berhasil meminjam buku!");
-    document.getElementById("pinjamModal").style.display = "none";
+    document.getElementById("pinjamModal").style.display = "none"; // Menutup modal setelah sukses
     loadBuku();
     loadRiwayat();
   } catch (err) {
@@ -263,6 +263,7 @@
     alert("Gagal meminjam buku: " + err.message);
   }
 }
+
 
 
 
