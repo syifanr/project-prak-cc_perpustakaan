@@ -237,7 +237,7 @@
     // Cek apakah stok buku lebih dari 0
     if (buku.stok <= 0) {
       alert("Stok buku ini habis. Tidak dapat melakukan peminjaman.");
-      return; // Hentikan proses jika stok 0
+      return;
     }
 
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
@@ -250,16 +250,20 @@
       tanggal_kembali: document.getElementById("tanggal_kembali").value,
     };
 
-    // Kirim permintaan peminjaman jika stok tersedia
+    console.log("Data peminjaman:", data); // Log data yang akan dikirim
+
     await axios.post(`${BASE_URL}/pinjam`, data);
+
     alert("Berhasil meminjam buku!");
     document.getElementById("pinjamModal").style.display = "none";
     loadBuku();
     loadRiwayat();
   } catch (err) {
+    console.error("Gagal meminjam buku:", err); // Log error
     alert("Gagal meminjam buku: " + err.message);
   }
 }
+
 
 
     async function loadRiwayat() {
